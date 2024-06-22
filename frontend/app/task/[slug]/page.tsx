@@ -9,6 +9,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { toast } from "@/components/ui/use-toast";
 import { format } from "date-fns";
 import { FilePenLine, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -52,6 +63,30 @@ export default function TaskPage({ params }: { params: { slug: string } }) {
     getTask();
   }, []);
 
+  async function DeleteTaskHandler() {
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/tasks/deleteTask/${params.slug}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (res) {
+        const data = await res.json();
+        if (data.status !== "error") {
+          toast({
+            title: "Task Deleted successfully!",
+            description: `Task ${task?.taskName} Deleted successfully.`,
+          });
+          router.push("/");
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <div className="flex flex-col items-center">
       <Header />
@@ -83,7 +118,7 @@ export default function TaskPage({ params }: { params: { slug: string } }) {
             <div>
               <span>Task Due Date : </span>
               <span className=" text-primary">
-                {task?.dueDate ? format(task.dueDate, "dd/MM/yyyy HH:mm") : ""}
+                {task?.dueDate ? format(task.dueDate, "dd/MM/yyyy") : ""}
               </span>
             </div>
           </div>
@@ -95,10 +130,35 @@ export default function TaskPage({ params }: { params: { slug: string } }) {
               <FilePenLine className="w-4" />
               <span>Edit Task</span>
             </Button>
-            <Button className="space-x-2">
-              <Trash2 className="w-4" />
-              <span>Delete Task</span>
-            </Button>
+            {/* delete task confirmation dialog */}
+
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="space-x-2">
+                  <Trash2 className="w-4" />
+                  <span>Delete</span>
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Delete Task</DialogTitle>
+                  <DialogDescription>
+                    Are you sure you want to delete this task?
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button variant={"outline"}>Cancel</Button>
+                  </DialogClose>
+                  <Button
+                    variant={"destructive"}
+                    onClick={() => DeleteTaskHandler()}
+                  >
+                    Delete
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
         </CardContent>
       </Card>

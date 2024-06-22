@@ -35,7 +35,7 @@ export default function TaskComponent({ task }: { task: TaskType }) {
         <div className="flex items-center justify-between">
           <div className="flex gap-2">
             <Calendar className="w-4" />
-            <span>{format(task.dueDate, "dd/MM/yyyy HH:mm")}</span>
+            <span>{format(task.dueDate, "dd/MM/yyyy")}</span>
           </div>
           <span>
             {task.status === "todo" ? (

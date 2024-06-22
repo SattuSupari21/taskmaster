@@ -63,6 +63,7 @@ export default function CreateTask() {
             title: "Task created successfully!",
             description: `Task ${title} created successfully.`,
           });
+          router.push("/");
         }
       }
     } catch (error) {
