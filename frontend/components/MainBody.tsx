@@ -37,7 +37,7 @@ export default function MainBody() {
   }, []);
 
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       {tasks.map((task) => {
         return <TaskComponent key={task.id} task={task} />;
       })}

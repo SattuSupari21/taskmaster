@@ -11,17 +11,20 @@ import {
 } from "@/components/ui/card";
 import { format } from "date-fns";
 import { FilePenLine, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+type TaskType = {
+  id: string;
+  taskName: string;
+  taskDescription: string;
+  status: "completed" | "todo" | "in-progress";
+  dueDate: Date;
+  userId: number;
+};
+
 export default function TaskPage({ params }: { params: { slug: string } }) {
-  type TaskType = {
-    id: string;
-    taskName: string;
-    taskDescription: string;
-    status: "completed" | "todo" | "in-progress";
-    dueDate: Date;
-    userId: number;
-  };
+  const router = useRouter();
 
   const [task, setTask] = useState<TaskType>();
 
@@ -85,7 +88,10 @@ export default function TaskPage({ params }: { params: { slug: string } }) {
             </div>
           </div>
           <div className="flex gap-2 justify-end">
-            <Button className=" space-x-2 ">
+            <Button
+              className=" space-x-2"
+              onClick={() => router.push(`/task/update/${task?.id}`)}
+            >
               <FilePenLine className="w-4" />
               <span>Edit Task</span>
             </Button>
