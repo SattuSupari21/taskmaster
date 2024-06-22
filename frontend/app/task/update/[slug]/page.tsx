@@ -35,14 +35,29 @@ import { Calendar } from "@/components/ui/calendar";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 
+import { z } from "zod";
+
 type TaskType = {
   id: string;
   taskName: string;
   taskDescription: string;
-  status: "completed" | "todo" | "in-progress";
+  status: "completed" | "todo" | "inprogress";
   dueDate: Date;
   userId: number;
 };
+
+const VALUES = ["completed", "todo", "inprogress"] as const;
+
+// zod schema for task updation
+const UpdateTaskSchema = z.object({
+  taskName: z
+    .string()
+    .min(3, { message: "Task title should be atleast 3 characters long." }),
+  taskDesciption: z.string().optional(),
+  status: z.enum(VALUES).default("todo"),
+  dueDate: z.date(),
+  userId: z.number(),
+});
 
 export default function UpdateTask({ params }: { params: { slug: string } }) {
   const router = useRouter();
@@ -58,6 +73,8 @@ export default function UpdateTask({ params }: { params: { slug: string } }) {
   const getTask = async () => {
     try {
       setLoading(true);
+
+      // getting task
       const res = await fetch(
         `http://localhost:5000/api/tasks/getTaskById/${params.slug}`,
         {
@@ -84,6 +101,23 @@ export default function UpdateTask({ params }: { params: { slug: string } }) {
 
   async function UpdateTaskHandler() {
     try {
+      // data validation
+      const { success } = UpdateTaskSchema.safeParse({
+        taskName: title,
+        taskDescription: description,
+        status,
+        dueDate: date,
+        userId: 1,
+      });
+
+      if (!success) {
+        // data validation failed
+        return toast({
+          title: "Data validation error!",
+        });
+      }
+
+      // zod validation success -> updating task
       const res = await fetch(
         `http://localhost:5000/api/tasks/updateTask/${params.slug}`,
         {

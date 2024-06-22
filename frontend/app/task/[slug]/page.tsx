@@ -29,7 +29,7 @@ type TaskType = {
   id: string;
   taskName: string;
   taskDescription: string;
-  status: "completed" | "todo" | "in-progress";
+  status: "completed" | "todo" | "inprogress";
   dueDate: Date;
   userId: number;
 };

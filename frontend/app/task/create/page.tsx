@@ -25,12 +25,26 @@ import { Calendar } from "@/components/ui/calendar";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 
+import { z } from "zod";
+
 type NewTaskType = {
   taskName: string;
   taskDescription: string;
-  status: "completed" | "todo" | "in-progress";
+  status: "completed" | "todo" | "inprogress";
   dueDate: Date;
 };
+
+const VALUES = ["completed", "todo", "inprogress"] as const;
+
+const NewTaskSchema = z.object({
+  taskName: z
+    .string()
+    .min(3, { message: "Task title should be atleast 3 characters long." }),
+  taskDesciption: z.string().optional(),
+  status: z.enum(VALUES).default("todo"),
+  dueDate: z.date(),
+  userId: z.number(),
+});
 
 export default function CreateTask() {
   const router = useRouter();
@@ -41,6 +55,20 @@ export default function CreateTask() {
 
   async function CreateNewTask() {
     try {
+      const { success } = NewTaskSchema.safeParse({
+        taskName: title,
+        taskDescription: description,
+        status,
+        dueDate: date,
+        userId: 1,
+      });
+
+      if (!success) {
+        return toast({
+          title: "Data validation error!",
+        });
+      }
+
       const res = await fetch(`http://localhost:5000/api/tasks/createTask`, {
         method: "POST",
         headers: {

@@ -8,7 +8,7 @@ export default function MainBody() {
     id: string;
     taskName: string;
     taskDescription: string;
-    status: "completed" | "todo" | "in-progress";
+    status: "completed" | "todo" | "inprogress";
     dueDate: Date;
     userId: number;
   };
