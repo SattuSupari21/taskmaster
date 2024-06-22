@@ -68,7 +68,7 @@ export default function UpdateTask({ params }: { params: { slug: string } }) {
   const [title, setTitle] = React.useState<string | null>(null);
   const [description, setDescription] = React.useState<string | null>(null);
   const [status, setStatus] = React.useState("todo");
-  const [date, setDate] = React.useState<Date | undefined>();
+  const [date, setDate] = React.useState<Date | undefined>(undefined);
 
   const getTask = async () => {
     try {
@@ -86,6 +86,7 @@ export default function UpdateTask({ params }: { params: { slug: string } }) {
         const data = await res.json();
         if (data.status !== "error") {
           setTask(data.task);
+          setDate(new Date(data.task?.dueDate));
         }
       }
     } catch (error) {
@@ -102,11 +103,11 @@ export default function UpdateTask({ params }: { params: { slug: string } }) {
   async function UpdateTaskHandler() {
     try {
       // data validation
-      const { success } = UpdateTaskSchema.safeParse({
-        taskName: title,
-        taskDescription: description,
+      const { success, error } = UpdateTaskSchema.safeParse({
+        taskName: title ? title : task?.taskName,
+        taskDescription: description ? description : task?.taskDescription,
         status,
-        dueDate: date,
+        dueDate: date ? date : task?.dueDate,
         userId: 1,
       });
 
@@ -114,6 +115,7 @@ export default function UpdateTask({ params }: { params: { slug: string } }) {
         // data validation failed
         return toast({
           title: "Data validation error!",
+          description: error.message,
         });
       }
 
