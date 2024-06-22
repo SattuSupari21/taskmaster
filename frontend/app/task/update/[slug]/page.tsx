@@ -157,7 +157,7 @@ export default function UpdateTask({ params }: { params: { slug: string } }) {
       <Header />
       {loading && <div>Loading...</div>}
       {!loading && (
-        <Card className="lg:w-[550px]">
+        <Card className="lg:w-[550px] md:w-[550px] max-[500px]:border-0">
           <CardHeader>
             <CardTitle>Update Task</CardTitle>
             <CardDescription>Update your existing task.</CardDescription>

@@ -102,7 +102,7 @@ export default function CreateTask() {
   return (
     <main className="flex min-h-screen flex-col items-center">
       <Header />
-      <Card className="lg:w-[550px]">
+      <Card className="lg:w-[550px] max-[500px]:border-0">
         <CardHeader>
           <CardTitle>Create New Task</CardTitle>
           <CardDescription>Create a new task.</CardDescription>

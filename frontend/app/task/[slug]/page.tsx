@@ -90,7 +90,7 @@ export default function TaskPage({ params }: { params: { slug: string } }) {
   return (
     <div className="flex flex-col items-center">
       <Header />
-      <Card className="max-w-[800px] w-full">
+      <Card className="lg:w-[800px] md:w-[600px] max-[500px]:w-full max-[500px]:border-0">
         <CardHeader>
           <CardTitle>Task Details</CardTitle>
           <CardDescription>Shows you details of your task.</CardDescription>
@@ -122,9 +122,9 @@ export default function TaskPage({ params }: { params: { slug: string } }) {
               </span>
             </div>
           </div>
-          <div className="flex gap-2 justify-end">
+          <div className="flex gap-2 lg:justify-end mt-4 md:justify-end max-[500px]:justify-center max-[500px]:mt-10">
             <Button
-              className=" space-x-2"
+              className="space-x-2 max-[500px]:w-full"
               onClick={() => router.push(`/task/update/${task?.id}`)}
             >
               <FilePenLine className="w-4" />
@@ -134,7 +134,7 @@ export default function TaskPage({ params }: { params: { slug: string } }) {
 
             <Dialog>
               <DialogTrigger asChild>
-                <Button className="space-x-2">
+                <Button className="space-x-2 max-[500px]:w-full">
                   <Trash2 className="w-4" />
                   <span>Delete</span>
                 </Button>
