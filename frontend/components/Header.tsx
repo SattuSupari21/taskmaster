@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
+import { ModeToggle } from "./theme-toggle";
 
 export default function Header() {
   return (
     <div className="container mx-auto">
-      <header className="flex h-20 w-full shrink-0 items-center">
+      <header className="flex h-20 w-full shrink-0 items-center gap-2">
         <Link href="/" className="flex" prefetch={false}>
           <span className="text-xl font-semibold">TaskMaster</span>
         </Link>
@@ -19,6 +20,7 @@ export default function Header() {
             </Button>
           </Link>
         </div>
+        <ModeToggle />
       </header>
     </div>
   );
